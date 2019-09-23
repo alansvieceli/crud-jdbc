@@ -34,6 +34,11 @@ public class App {
 			} catch (SQLException e) {
 				throw new DbException(e.getMessage());
 			}
+			finally {
+				DB.closeResultSet(rs);
+				DB.closeStatement(st);
+				DB.closeConnection();
+			}
 		
 	}
 
