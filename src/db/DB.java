@@ -31,6 +31,7 @@ public class DB {
 		if (conn != null) {
 			try {
 				conn.close();
+				conn = null;
 			} catch (SQLException e) {
 				throw new DbException(e.getMessage());
 			}
