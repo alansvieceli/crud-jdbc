@@ -17,8 +17,46 @@ public class App {
 	public static void main(String[] args) {
 
 		/*** colocar a fiuncao q quer executar) **/
-		atualizarDados();
+		testarTransacaoDeDados();
 
+	}
+	
+	private static void testarTransacaoDeDados() {
+		
+		Connection conn = null;
+		Statement st = null;
+		try {
+			conn = DB.getConnection();
+			conn.setAutoCommit(false);
+			
+			st = conn.createStatement();
+			
+			int row1 = st.executeUpdate("update seller set BaseSalary = 2231 where DepartmentId = 1 ");
+			
+			int x=3;
+			if (x < 2) {
+				throw new SQLException("Fake error");
+			}
+			
+			int row2 = st.executeUpdate("update seller set BaseSalary = 3341 where DepartmentId = 2 ");
+			
+			conn.commit();
+			
+			System.out.println(row1 + " - " + row2);
+
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+				throw new DbException("Rollback OK. Caused by: " + e.getMessage());
+			} catch (SQLException e1) {
+				throw new DbException("Rollback error. Caused by: " + e.getMessage());
+			}
+			
+		} finally {
+			DB.closeStatement(st);
+			DB.closeConnection();
+		}
+		
 	}
 
 	private static void recuperarDados() {
